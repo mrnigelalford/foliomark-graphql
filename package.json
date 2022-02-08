@@ -1,0 +1,23 @@
+{
+  "name": "foliomark-graphql",
+  "version": "0.0.1",
+  "description": "graphql middle tier of foliomark",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "d"
+  },
+  "keywords": [
+    "graphql",
+    "apollo"
+  ],
+  "author": "mrnigelalford",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-cloud-functions": "^3.6.2",
+    "graphql": "^16.3.0"
+  }
+}
