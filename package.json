@@ -2,13 +2,16 @@
   "name": "foliomark-graphql",
   "version": "0.0.1",
   "description": "graphql middle tier of foliomark",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "npx functions-framework --target=YOUR_FUNCTION_NAME [--signature-type=YOUR_SIGNATURE_TYPE]",
+    "tsx": "tsc && node dist/index.js",
+    "lint": "eslint . --ext .ts"
   },
   "repository": {
     "type": "git",
-    "url": "d"
+    "url": "https://github.com/mrnigelalford/foliomark-graphql"
   },
   "keywords": [
     "graphql",
@@ -17,7 +20,17 @@
   "author": "mrnigelalford",
   "license": "ISC",
   "dependencies": {
+    "apollo-server": "^3.6.3",
     "apollo-server-cloud-functions": "^3.6.2",
     "graphql": "^16.3.0"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^2.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "assert": "^2.0.0",
+    "eslint": "^8.8.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.5"
   }
 }
