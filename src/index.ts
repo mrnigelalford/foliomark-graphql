@@ -1,10 +1,10 @@
 import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import resolvers from './resolvers';
-import typeDefs from './type-def';
+import typeDef from './type-def';
 
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  typeDefs: typeDef,
+  mocks: true, // TODO: Remove in PROD.
+  mockEntireSchema: false, // TODO: Remove in PROD.
 });
 
 
