@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "start": "npx functions-framework --target=YOUR_FUNCTION_NAME [--signature-type=YOUR_SIGNATURE_TYPE]",
-    "tsx": "tsc && node dist/index.js",
+    "publish": "tsc && gcloud functions deploy web",
     "lint": "eslint . --ext .ts"
   },
   "repository": {
@@ -20,6 +20,8 @@
   "author": "mrnigelalford",
   "license": "ISC",
   "dependencies": {
+    "apollo-datasource-mongodb": "^0.5.2",
+    "apollo-mongodb-datasource": "^1.1.0",
     "apollo-server": "^3.6.3",
     "apollo-server-cloud-functions": "^3.6.2",
     "graphql": "^16.3.0"

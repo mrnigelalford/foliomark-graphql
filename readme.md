@@ -12,3 +12,9 @@ Build for prod
 ```
  NODE_ENV=production npm run build
  ```
+
+ ### Welcome to the GraphQL middle layer
+
+ This middle layer uses Apollo GraphQL hosted on Google Cloud Functions
+
+ [ApolloGraphQL](https://www.apollographql.com/docs/tutorial) has a great learning tutorial to walk through the basics of setting up GraphQL
