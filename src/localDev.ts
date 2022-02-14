@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-cloud-functions';
+import { ApolloServer as localApolloServer } from 'apollo-server';
 import { MongoClient } from 'mongodb';
 import typeDef from './type-def';
 import resolvers from './dataSources/resolvers';
@@ -11,13 +11,21 @@ require('dotenv').config();
 const client = new MongoClient(process.env.mongoURL);
 client.connect();
 
-const server = new ApolloServer({
+const server = new localApolloServer({
   typeDefs: typeDef,
   resolvers,
   dataSources: () => ({
     authors: new Authors(client.db('foliomark').collection('authors')),
     assets: new Assets(client.db('foliomark').collection('assets')),
   }),
+  mocks: false, // TODO: Remove in PROD.
+  mockEntireSchema: false, // TODO: Remove in PROD.
 });
 
-exports.handler = server.createHandler();
+server.listen().then(() => {
+  console.log(`
+      Server is running!
+      Listening on port 4000
+      Explore at https://studio.apollographql.com/sandbox
+    `);
+});
