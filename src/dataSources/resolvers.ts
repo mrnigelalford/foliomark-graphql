@@ -5,4 +5,19 @@ export default {
     author: (_, { id }, { dataSources }) =>
       dataSources.authors.getAuthorByID({ id }),
   },
+  Mutation: {
+    setAsset: async (
+      _,
+      { title, description, price, category, token },
+      { dataSources }
+    ) => {
+      const asset = await dataSources.assets.setAsset({
+        title,
+        description,
+        price,
+        category,
+        token,
+      });
+    },
+  },
 };

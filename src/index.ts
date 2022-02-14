@@ -6,8 +6,6 @@ import resolvers from './dataSources/resolvers';
 import Assets from './dataSources/Assets';
 import Authors from './dataSources/Authors';
 
-require('dotenv').config();
-
 const client = new MongoClient(process.env.mongoURL);
 client.connect();
 
