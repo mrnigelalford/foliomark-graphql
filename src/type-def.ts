@@ -9,24 +9,27 @@ export default gql`
   }
 
   type Auction {
-    id: ID!
-    auctionUrl: String!
-    startingPrice: Float!
-    currentPrice: Float!
-    endDate: String!
-    token: Token!
+    _id: String!
+    nftID: String!
+    url: String
+    startingPrice: Int
+    currentPrice: Int
+    endDate: String
+    token: Token
     bids: Int
+    asset: [Asset]
   }
 
   type Asset {
-    id: ID!
-    url: String!
-    auction: [Auction]
-    Author: [Author]!
+    _id: ID!
+    url: String
+    auctionID: String
+    authorID: String;
+    Author: [String]!
     previewImg: String!
     fullImg: String!
     title: String!
-    price: Int,
+    price: Int
     token: Token!
     likes: Int
     category: String
@@ -52,7 +55,7 @@ export default gql`
     CTEZ
   }
 
-  enum Category { 
+  enum Category {
     Art
     Website
     Mobile
@@ -61,7 +64,8 @@ export default gql`
     illustration
     study
     Template
-    Product Design
+    Product
+    Design
     Typography
   }
 
@@ -69,11 +73,25 @@ export default gql`
     asset(id: ID): Asset
     assets: [Asset]
     author(id: ID): Author
+    auctions: [Auction]
+    auction(id: ID): Auction
   }
 
   type Mutation {
-    setAsset(title: String, description: String, price: Int, category: Category, token: Token): AssetSetResponse
-    setAuthor( bioLink: String img: String name: String ): AuthorSetResponse
-   }
-
+    setAsset(
+      title: String
+      description: String
+      price: Int
+      category: Category
+      token: Token
+    ): AssetSetResponse
+    setAuthor(bioLink: String, img: String, name: String): AuthorSetResponse
+    setAuction(
+      nftID: String!
+      auctionURL: String!
+      currentPrice: Int
+      endDate: Category
+      token: Token
+    ): AssetSetResponse
+  }
 `;

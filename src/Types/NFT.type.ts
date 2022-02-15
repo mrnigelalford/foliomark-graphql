@@ -1,3 +1,5 @@
+import { Auction } from './Auction.type';
+
 enum Token {
   XTZ = 'XTZ',
   WXTZ = 'WXTZ',
@@ -11,18 +13,8 @@ interface Author {
   name: string;
 }
 
-interface Auction {
-  id: string;
-  auctionUrl: string;
-  startingPrice: number;
-  currentPrice: number;
-  endDate: string;
-  token: Token;
-  bids: number;
-}
-
 export interface NFT {
-  id: string;
+  _id: string;
   url: string;
   auction?: Auction[];
   Author: Author;

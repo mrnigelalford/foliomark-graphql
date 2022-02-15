@@ -1,7 +1,12 @@
+import { Auction } from '../Types/Auction.type';
+
 export default {
   Query: {
     asset: (_, { id }, { dataSources }) => dataSources.assets.getAssetByID(id),
     assets: (_, __, { dataSources }) => dataSources.assets.getAllAssets(),
+    auctions: (_, __, { dataSources }) => dataSources.auctions.getAllAuctions(),
+    auction: (_, { id }, { dataSources }) =>
+      dataSources.auctions.getAuctionByID({ id }),
     author: (_, { id }, { dataSources }) =>
       dataSources.authors.getAuthorByID({ id }),
   },
@@ -11,7 +16,7 @@ export default {
       { title, description, price, category, token },
       { dataSources }
     ) => {
-      const asset = await dataSources.assets.setAsset({
+      return await dataSources.assets.setAsset({
         title,
         description,
         price,
@@ -19,5 +24,7 @@ export default {
         token,
       });
     },
+    setAuction: (_, props: Auction, { dataSources }) =>
+      dataSources.auction.setAuction(props),
   },
 };
