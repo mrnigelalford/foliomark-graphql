@@ -27,5 +27,7 @@ export default {
     },
     setAuction: (_, props: Auction, { dataSources }) =>
       dataSources.auction.setAuction(props),
+    setAuthor: (_, props: Auction, { dataSources }) =>
+      dataSources.authors.setAuthor(props),
   },
 };

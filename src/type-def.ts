@@ -86,7 +86,12 @@ export default gql`
       category: Category
       token: Token
     ): AssetSetResponse
-    setAuthor(bioLink: String, img: String, name: String): AuthorSetResponse
+    setAuthor(
+      bioLink: String
+      img: String
+      name: String
+      sales: Int
+    ): AuthorSetResponse
     setAuction(
       nftID: String!
       auctionURL: String!
