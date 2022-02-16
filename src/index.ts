@@ -5,6 +5,7 @@ import resolvers from './dataSources/resolvers';
 
 import Assets from './dataSources/Assets';
 import Authors from './dataSources/Authors';
+import Auctions from './dataSources/Auctions';
 
 const client = new MongoClient(process.env.mongoURL);
 client.connect();
@@ -15,6 +16,7 @@ const server = new ApolloServer({
   dataSources: () => ({
     authors: new Authors(client.db('foliomark').collection('authors')),
     assets: new Assets(client.db('foliomark').collection('assets')),
+    auctions: new Auctions(client.db('foliomark').collection('auctions')),
   }),
 });
 
