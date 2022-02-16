@@ -1,0 +1,7 @@
+export type Author {
+  _id: ID!
+  bioLink: String
+  img: String
+  name: String!
+  sales: Int!
+}

@@ -1,4 +1,5 @@
 import { Auction } from '../Types/Auction.type';
+import { Collection } from '../Types/Collection.type';
 
 export default {
   Query: {
@@ -10,6 +11,10 @@ export default {
     authors: (_, __, { dataSources }) => dataSources.authors.getAllAuthors(),
     author: (_, { id }, { dataSources }) =>
       dataSources.authors.getAuthorByID({ id }),
+    collections: (_, __, { dataSources }) =>
+      dataSources.collections.getAllCollections(),
+    collection: (_, { id }, { dataSources }) =>
+      dataSources.collections.getCollectionByID({ id }),
   },
   Mutation: {
     setAsset: async (
@@ -29,5 +34,7 @@ export default {
       dataSources.auction.setAuction(props),
     setAuthor: (_, props: Auction, { dataSources }) =>
       dataSources.authors.setAuthor(props),
+    setCollection: (_, props: Collection, { dataSources }) =>
+      dataSources.collections.setCollection(props),
   },
 };

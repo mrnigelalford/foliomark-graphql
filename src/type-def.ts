@@ -28,7 +28,7 @@ export default gql`
     author: Author
     previewImg: String!
     fullImg: String!
-    title: String!
+    title: String
     price: Int
     token: Token!
     likes: Int
@@ -47,6 +47,17 @@ export default gql`
     success: Boolean!
     id: String
     name: String
+  }
+
+  type Collection {
+    _id: String
+    title: String!
+    description: String
+    img: String
+    views: Int!
+    likes: Int!
+    assetIDs: [String]
+    assets: [Asset]
   }
 
   enum Token {
@@ -76,6 +87,8 @@ export default gql`
     authors: [Author]
     auctions: [Auction]
     auction(id: ID): Auction
+    collections: [Collection]
+    collection(id: ID): Collection
   }
 
   type Mutation {
@@ -98,6 +111,14 @@ export default gql`
       currentPrice: Int
       endDate: Category
       token: Token
+    ): AssetSetResponse
+    setCollection(
+      name: String!
+      description: String
+      img: String
+      views: Int!
+      likes: Int!
+      assetIDs: [String]
     ): AssetSetResponse
   }
 `;
