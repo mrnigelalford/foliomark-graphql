@@ -7,6 +7,8 @@ import Assets from './dataSources/Assets';
 import Authors from './dataSources/Authors';
 import Auctions from './dataSources/Auctions';
 
+require('dotenv').config();
+
 const client = new MongoClient(process.env.mongoURL);
 client.connect();
 

@@ -6,6 +6,7 @@ export default gql`
     bioLink: String
     img: String
     name: String!
+    sales: Int!
   }
 
   type Auction {
@@ -72,6 +73,7 @@ export default gql`
     asset(id: ID): Asset
     assets: [Asset]
     author(id: ID): Author
+    authors: [Author]
     auctions: [Auction]
     auction(id: ID): Auction
   }

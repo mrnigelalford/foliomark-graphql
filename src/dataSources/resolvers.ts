@@ -7,6 +7,7 @@ export default {
     auctions: (_, __, { dataSources }) => dataSources.auctions.getAllAuctions(),
     auction: (_, { id }, { dataSources }) =>
       dataSources.auctions.getAuctionByID({ id }),
+    authors: (_, __, { dataSources }) => dataSources.authors.getAllAuthors(),
     author: (_, { id }, { dataSources }) =>
       dataSources.authors.getAuthorByID({ id }),
   },

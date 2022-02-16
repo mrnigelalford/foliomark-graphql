@@ -26,7 +26,7 @@ export default class Auctions extends MongoDataSource {
       ])
       .toArray();
 
-    console.log('auction: ', auction);
+    console.log('auction: ', auction.length);
     return auction;
   }
 
