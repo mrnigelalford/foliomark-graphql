@@ -2,7 +2,7 @@ import { gql } from 'apollo-server';
 
 export default gql`
   type Author {
-    id: ID!
+    _id: ID!
     bioLink: String
     img: String
     name: String!
@@ -24,8 +24,7 @@ export default gql`
     _id: ID!
     url: String
     auctionID: String
-    authorID: String;
-    Author: [String]!
+    author: Author
     previewImg: String!
     fullImg: String!
     title: String!
