@@ -24,6 +24,8 @@ export default class Asset extends MongoDataSource {
         price: props.price,
         category: props.category,
         token: props.token,
+        fullImg: props.fullImg,
+        previewImg: props.previewImg,
       })
       .then((res) => {
         console.log('insert successful: ', res);
