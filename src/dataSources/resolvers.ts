@@ -19,7 +19,7 @@ export default {
   Mutation: {
     setAsset: async (
       _,
-      { title, description, price, category, token },
+      { title, description, price, category, token, fullImg, previewImg },
       { dataSources }
     ) => {
       return await dataSources.assets.setAsset({
@@ -28,6 +28,8 @@ export default {
         price,
         category,
         token,
+        fullImg,
+        previewImg,
       });
     },
     setAuction: (_, props: Auction, { dataSources }) =>

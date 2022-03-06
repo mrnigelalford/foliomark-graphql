@@ -98,6 +98,8 @@ export default gql`
       price: Int
       category: Category
       token: Token
+      fullImg: String
+      previewImg: String
     ): AssetSetResponse
     setAuthor(
       bioLink: String

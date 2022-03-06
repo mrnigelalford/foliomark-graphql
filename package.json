@@ -7,7 +7,7 @@
     "test": "test",
     "start": "tsc && node dist/index.js",
     "localDev": "tsc && node dist/localDev.js",
-    "publish": "tsc && gcloud functions deploy web",
+    "app.deploy": "tsc && gcloud functions deploy web",
     "lint": "eslint . --ext .ts"
   },
   "repository": {
