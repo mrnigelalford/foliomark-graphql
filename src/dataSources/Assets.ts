@@ -15,6 +15,7 @@ export default class Asset extends MongoDataSource {
 
   setAsset = async (props: NFT) => {
     const session = await this.client.connect();
+
     session
       .db(process.env.dbName)
       .collection('assets')

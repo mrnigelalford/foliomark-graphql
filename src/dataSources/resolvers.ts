@@ -1,5 +1,6 @@
 import { Auction } from '../Types/Auction.type';
 import { Collection } from '../Types/Collection.type';
+import { NFT } from '../Types/NFT.type';
 
 export default {
   Query: {
@@ -38,5 +39,8 @@ export default {
       dataSources.authors.setAuthor(props),
     setCollection: (_, props: Collection, { dataSources }) =>
       dataSources.collections.setCollection(props),
+    Mint: (_, props: NFT, { dataSources }) => dataSources.assets.mint(props),
+    Originate: (_, props: NFT, { dataSources }) =>
+      dataSources.assets.originate(props),
   },
 };

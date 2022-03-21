@@ -21,6 +21,9 @@
   "author": "mrnigelalford",
   "license": "ISC",
   "dependencies": {
+    "@oxheadalpha/fa2-interfaces": "^4.1.2",
+    "@taquito/signer": "^12.0.0",
+    "@taquito/taquito": "^12.0.0",
     "apollo-mongodb-datasource": "^1.1.0",
     "apollo-server": "^3.6.3",
     "apollo-server-cloud-functions": "^3.6.2",
