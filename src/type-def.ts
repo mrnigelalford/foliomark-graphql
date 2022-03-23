@@ -1,6 +1,31 @@
 import { gql } from 'apollo-server';
 
 export default gql`
+  input Source {
+    tools: [String]
+    location: String
+  }
+
+  input License {
+    name: String
+  }
+
+  input Metadata {
+    name: String
+    description: String
+    homepage: String
+    authors: [String]
+    version: String
+    license: License
+    interfaces: [String]
+    source: Source
+  }
+
+  input TokenMetadataInternal {
+    id: Int
+    uri: String
+  }
+
   type Author {
     _id: ID!
     bioLink: String
@@ -58,6 +83,27 @@ export default gql`
     likes: Int!
     assetIDs: [String]
     assets: [Asset]
+  }
+
+  type MintReceipt {
+    kind: String
+    source: String
+    fee: String
+    counter: String
+    gas_limit: String
+    storage_limit: String
+    amount: String
+    destination: String
+  }
+
+  type RPC {
+    url: String
+    chain: String
+  }
+
+  type OriginationReceipt {
+    address: String
+    rpc: RPC
   }
 
   enum Token {
@@ -122,5 +168,11 @@ export default gql`
       likes: Int!
       assetIDs: [String]
     ): AssetSetResponse
+    Mint(
+      ownerAddress: String
+      contractAddress: String
+      tokens: [TokenMetadataInternal]
+    ): MintReceipt
+    Originate(jsonMetadata: Metadata, owner: String): OriginationReceipt
   }
 `;
