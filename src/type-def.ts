@@ -92,7 +92,7 @@ export default gql`
   }
 
   type MintReceipt {
-    kind: String
+    kind: String!
     source: String
     fee: String
     counter: String
@@ -102,9 +102,30 @@ export default gql`
     destination: String
   }
 
-  type TranferReceipt {
+  type Transaction {
+    to_: String
+    token_id: String
+    amount: Int
+  }
+
+  type TransferReceipt {
     from_: String
-      txs: [{ to_: string, token_id: string, amount: int }]
+    txs: [Transaction]
+  }
+
+  type ProcessReceipt {
+    message: String!
+    source: String
+    fee: String
+    counter: String
+    gas_limit: String
+    storage_limit: String
+    amount: String
+    destination: String
+  }
+
+  type ProcessError {
+    message: String
   }
 
   type RPC {
@@ -180,11 +201,22 @@ export default gql`
       assetIDs: [String]
     ): AssetSetResponse
     Mint(
-      ownerAddress: String
-      contractAddress: String
-      tokens: [TokenMetadataInternal]
-    ): MintReceipt
+      ownerAddress: String!
+      contractAddress: String!
+      tokens: [TokenMetadataInternal!]
+    ): ProcessReceipt
     Originate(jsonMetadata: Metadata, owner: String): OriginationReceipt
-    Transfer(TransferProps): TransferReceipt
+    Transfer(
+      contractAddress: String!
+      tokenId: Int!
+      to: String!
+      from: String!
+    ): ProcessReceipt
+    Burn(
+      contractAddress: String!
+      tokenId: Int!
+      ownerAddress: String!
+    ): ProcessReceipt
+    Pause(contractAddress: String!): Boolean
   }
 `;

@@ -1,22 +1,33 @@
 import { InMemorySigner } from '@taquito/signer';
-import { DefaultContractType, TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 import * as fs from 'fs';
-import { createOffChainTokenMetadata } from '@oxheadalpha/fa2-interfaces';
+import {
+  address,
+  createOffChainTokenMetadata,
+  Transfer,
+} from '@oxheadalpha/fa2-interfaces';
 import { createStorage } from './NFT/NFT';
+import {
+  BurnProps,
+  MintProps,
+  OriginationProps,
+  TransferProps,
+} from './resolvers';
 
 export interface Attribute {
   name: string;
   value: string;
 }
 
-type MintReceipt = {
-  source: string;
-  fee: string;
-  counter: string;
-  gas_limit: string;
-  storage_limit: string;
-  amount: string;
-  destination: string;
+export type FA2Receipt = {
+  message: string;
+  source?: string;
+  fee?: string;
+  counter?: string;
+  gas_limit?: string;
+  storage_limit?: string;
+  amount?: string;
+  destination?: string;
 };
 
 type OriginationReceipt = {
@@ -32,6 +43,13 @@ const testKey = 'edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq';
 export class TezosNode {
   private tezos: TezosToolkit;
 
+  private nftTransfer(from_: address, to_: address, tokenId: number): Transfer {
+    return {
+      from_,
+      txs: [{ to_, token_id: tokenId, amount: 1 }],
+    };
+  }
+
   constructor(rpcUrl: string) {
     this.tezos = new TezosToolkit(rpcUrl);
     this.tezos.setProvider({
@@ -39,10 +57,7 @@ export class TezosNode {
     });
   }
 
-  public async originate(args: {
-    jsonMetadata: any;
-    ownerAddress: string;
-  }): Promise<OriginationReceipt> {
+  public async originate(args: OriginationProps): Promise<OriginationReceipt> {
     const storage = createStorage({
       metadata: JSON.stringify(args.jsonMetadata),
       owner: args.ownerAddress,
@@ -62,6 +77,8 @@ export class TezosNode {
 
     const receipt = await originationOp.then((o) => o);
 
+    console.log('receipt: ', receipt);
+
     return {
       address: receipt['address'],
       rpc: {
@@ -71,28 +88,29 @@ export class TezosNode {
     };
   }
 
-  public async mint(
-    ownerAddress: string,
-    contractAddress: string,
-    tokens: { id: number; uri: string }[]
-  ): Promise<any> {
-    // const balance = await this.tezos.tz.getBalance(ownerAddress);
+  public async mint(args: MintProps): Promise<FA2Receipt> {
+    const balance = await this.tezos.tz.getBalance(args.ownerAddress);
 
-    const contract = await this.tezos.contract.at(contractAddress);
+    const contract = await this.tezos.contract.at(args.contractAddress);
     const proccessedTokens = [];
-    tokens.forEach(({ id, uri }) =>
+
+    if (balance.lt(0.2)) {
+      return { message: `${args.ownerAddress} has Insufficient funds` };
+    }
+    args.tokens.forEach(({ id, uri }) =>
       proccessedTokens.push(createOffChainTokenMetadata(id, uri))
     );
 
     if (proccessedTokens.length) {
       const mint = await contract.methods
-        .mint([{ owner: ownerAddress, tokens: proccessedTokens }])
+        .mint([{ owner: args.ownerAddress, tokens: proccessedTokens }])
         .send();
 
-      const receipt = mint.results[0];
+      if (mint.errors.length) return { message: mint.errors[0]['message'] };
 
+      const receipt = mint.results[0];
       return {
-        kind: receipt['kind'],
+        message: 'Success',
         source: receipt['source'],
         fee: receipt['fee'],
         counter: receipt['counter'],
@@ -113,25 +131,66 @@ export class TezosNode {
     console.log('Pause Receipt: ', receipt);
   }
 
-  public async burn(contractAddress: string, tokenId: number): Promise<void> {
-    const contract = await this.tezos.contract.at(contractAddress);
+  public async burn(args: BurnProps): Promise<FA2Receipt> {
+    console.log('args: ', args);
+    const contract = await this.tezos.contract.at(args.contractAddress);
 
-    const burn = await contract.methods.burn(tokenId).send();
+    const burn = await contract.methods
+      .burn([{ owner: args.ownerAddress, tokens: [args.tokenId], amount: 1 }])
+      .send();
 
     const receipt = burn.results;
-    console.log('Burn Receipt: ', receipt);
+
+    console.log('receipt: ', receipt);
+
+    if (burn.errors.length) {
+      const message = burn.errors[0]['message'];
+      console.log('problem here: ', message);
+      return { message };
+    }
+    return {
+      message: 'Success',
+      source: receipt['source'],
+      fee: receipt['fee'],
+      counter: receipt['counter'],
+      gas_limit: receipt['gas_limit'],
+      storage_limit: receipt['storage_limit'],
+      amount: receipt['amount'],
+      destination: receipt['destination'],
+    };
   }
 
-  public async transferToken(
-    contractAddress: string,
-    tokenId: number,
-    to: string
-  ): Promise<void> {
-    const contract = await this.tezos.contract.at(contractAddress);
+  public async transfer(args: TransferProps): Promise<FA2Receipt> {
+    const from = await this.tezos.tz.getBalance(args.from);
+    const to = await this.tezos.tz.getBalance(args.to);
+    console.log('from: balance: ', args.from, from.gt(0));
+    console.log('to: balance: ', args.to, to.gt(0));
 
-    const transfer = await contract.methods.transfer(tokenId, to).send();
+    const contract = await this.tezos.contract.at(args.contractAddress);
 
-    const receipt = transfer.results;
-    console.log('Transfer Receipt: ', receipt);
+    if (from.gt(0)) {
+      const transfer = await contract.methods
+        .transfer([this.nftTransfer(args.from, args.to, args.tokenId)])
+        .send();
+
+      if (transfer.errors.length) {
+        return { message: transfer.errors[0]['message'] };
+      }
+      const receipt = transfer.results;
+      console.log('Transfer Receipt: ', receipt);
+      return {
+        message: 'Success',
+        source: receipt['source'],
+        fee: receipt['fee'],
+        counter: receipt['counter'],
+        gas_limit: receipt['gas_limit'],
+        storage_limit: receipt['storage_limit'],
+        amount: receipt['amount'],
+        destination: receipt['destination'],
+      };
+    } else {
+      console.log('Insufficient funds');
+      return { message: `${from} has Insufficient funds` };
+    }
   }
 }
