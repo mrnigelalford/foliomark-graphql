@@ -38,6 +38,14 @@ interface MintProps {
   tokens: { id: number; uri: string }[];
   contractAddress: string;
 }
+interface BurnProps {
+  contractAddress: string;
+  tokenId: number;
+}
+
+interface TransferProps extends BurnProps {
+  to: string;
+}
 
 export default {
   Query: {
@@ -79,9 +87,14 @@ export default {
     Mint: (_, args: MintProps) =>
       tezosNode.mint(args.ownerAddress, args.contractAddress, args.tokens),
     Originate: async (_, args: OriginationProps) =>
-      await tezosNode.originate({
+      tezosNode.originate({
         jsonMetadata: args.jsonMetadata,
         ownerAddress: args.owner,
       }),
+    Transfer: async (_, args: TransferProps) =>
+      tezosNode.transferToken(args.contractAddress, args.tokenId, args.to),
+    Burn: (_, args: BurnProps) =>
+      tezosNode.burn(args.contractAddress, args.tokenId),
+    Pause: (_, contractAddress: string) => tezosNode.pause(contractAddress),
   },
 };

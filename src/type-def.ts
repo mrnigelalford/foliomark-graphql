@@ -21,6 +21,12 @@ export default gql`
     source: Source
   }
 
+  input TransferProps {
+    contractAddress: String
+    tokenId: Int
+    to: String
+  }
+
   input TokenMetadataInternal {
     id: Int
     uri: String
@@ -94,6 +100,11 @@ export default gql`
     storage_limit: String
     amount: String
     destination: String
+  }
+
+  type TranferReceipt {
+    from_: String
+      txs: [{ to_: string, token_id: string, amount: int }]
   }
 
   type RPC {
@@ -174,5 +185,6 @@ export default gql`
       tokens: [TokenMetadataInternal]
     ): MintReceipt
     Originate(jsonMetadata: Metadata, owner: String): OriginationReceipt
+    Transfer(TransferProps): TransferReceipt
   }
 `;
