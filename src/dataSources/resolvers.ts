@@ -1,6 +1,6 @@
 import { Auction } from '../Types/Auction.type';
 import { Collection } from '../Types/Collection.type';
-import { FA2Receipt, TezosNode } from './TezosInterface';
+import { FA2Receipt, OriginationReceipt, TezosNode } from './TezosInterface';
 
 const tezosNode = new TezosNode('http://0.0.0.0:20000');
 export interface Metadata {
@@ -82,7 +82,8 @@ export default {
     setCollection: (_, props: Collection, { dataSources }) =>
       dataSources.collections.setCollection(props),
     Mint: (_, args: MintProps): Promise<FA2Receipt> => tezosNode.mint(args),
-    Originate: async (_, args: OriginationProps) => tezosNode.originate(args),
+    Originate: async (_, args: OriginationProps): Promise<OriginationReceipt> =>
+      tezosNode.originate(args),
     Transfer: async (_, transferProps: TransferProps): Promise<FA2Receipt> =>
       tezosNode.transfer(transferProps),
     Burn: (_, burnProps: BurnProps): Promise<FA2Receipt> =>

@@ -30,7 +30,7 @@ export type FA2Receipt = {
   destination?: string;
 };
 
-type OriginationReceipt = {
+export type OriginationReceipt = {
   address: string;
   rpc: {
     url: string;
