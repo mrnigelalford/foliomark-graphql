@@ -2,7 +2,7 @@ import { Auction } from '../Types/Auction.type';
 import { Collection } from '../Types/Collection.type';
 import { FA2Receipt, OriginationReceipt, TezosNode } from './TezosInterface';
 
-const tezosNode = new TezosNode('http://0.0.0.0:20000');
+const tezosNode = new TezosNode('https://hangzhounet.api.tez.ie');
 export interface Metadata {
   name: string;
   description: string;
@@ -30,13 +30,13 @@ export interface OriginationProps {
 
 export interface MintProps {
   ownerAddress: string;
-  tokens: { id: number; uri: string }[];
   contractAddress: string;
+  tokens: { id: number; uri: string }[];
 }
 export interface BurnProps {
+  ownerAddress: string;
   contractAddress: string;
   tokenId: number;
-  ownerAddress: string;
 }
 
 export interface TransferProps extends BurnProps {

@@ -205,7 +205,7 @@ export default gql`
       contractAddress: String!
       tokens: [TokenMetadataInternal!]
     ): ProcessReceipt
-    Originate(jsonMetadata: Metadata, owner: String): OriginationReceipt
+    Originate(jsonMetadata: Metadata, ownerAddress: String): OriginationReceipt
     Transfer(
       contractAddress: String!
       tokenId: Int!

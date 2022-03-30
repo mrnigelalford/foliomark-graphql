@@ -38,7 +38,7 @@ export type OriginationReceipt = {
   };
 };
 
-const testKey = 'edsk3QoqBuvdamxouPhin7swCvkQNgq4jP5KZPbwWNnwdZpSpJiEbq';
+const testKey = 'edsk47JmoRXUujaKZTRp7P1AVpdUaQE2nTBzWhd85gPjeFgPWaXpUJ'; // local testing only. in prod use wallet to retrieve this info from the user
 
 export class TezosNode {
   private tezos: TezosToolkit;
@@ -49,12 +49,11 @@ export class TezosNode {
       txs: [{ to_, token_id: tokenId, amount: 1 }],
     };
   }
+  private signer = new InMemorySigner(testKey);
 
   constructor(rpcUrl: string) {
     this.tezos = new TezosToolkit(rpcUrl);
-    this.tezos.setProvider({
-      signer: new InMemorySigner(testKey),
-    });
+    this.tezos.setSignerProvider(this.signer);
   }
 
   public async originate(args: OriginationProps): Promise<OriginationReceipt> {
@@ -77,8 +76,6 @@ export class TezosNode {
 
     const receipt = await originationOp.then((o) => o);
 
-    console.log('receipt: ', receipt);
-
     return {
       address: receipt['address'],
       rpc: {
@@ -90,12 +87,13 @@ export class TezosNode {
 
   public async mint(args: MintProps): Promise<FA2Receipt> {
     const balance = await this.tezos.tz.getBalance(args.ownerAddress);
-
     const contract = await this.tezos.contract.at(args.contractAddress);
     const proccessedTokens = [];
 
     if (balance.lt(0.2)) {
-      return { message: `${args.ownerAddress} has Insufficient funds` };
+      return {
+        message: `${args.ownerAddress} has Insufficient funds`,
+      };
     }
     args.tokens.forEach(({ id, uri }) =>
       proccessedTokens.push(createOffChainTokenMetadata(id, uri))
@@ -103,7 +101,12 @@ export class TezosNode {
 
     if (proccessedTokens.length) {
       const mint = await contract.methods
-        .mint([{ owner: args.ownerAddress, tokens: proccessedTokens }])
+        .mint([
+          {
+            owner: 'tz1WuzBwPCGewc6vc5NYJuAsPmkSD58oAqGH', // only valid for testing in prod use user wallet info
+            tokens: proccessedTokens,
+          },
+        ])
         .send();
 
       if (mint.errors.length) return { message: mint.errors[0]['message'] };
@@ -128,7 +131,6 @@ export class TezosNode {
     const pause = await contract.methods.pause().send();
 
     const receipt = pause.results;
-    console.log('Pause Receipt: ', receipt);
   }
 
   public async burn(args: BurnProps): Promise<FA2Receipt> {
@@ -140,8 +142,6 @@ export class TezosNode {
       .send();
 
     const receipt = burn.results;
-
-    console.log('receipt: ', receipt);
 
     if (burn.errors.length) {
       const message = burn.errors[0]['message'];
@@ -177,7 +177,6 @@ export class TezosNode {
         return { message: transfer.errors[0]['message'] };
       }
       const receipt = transfer.results;
-      console.log('Transfer Receipt: ', receipt);
       return {
         message: 'Success',
         source: receipt['source'],
