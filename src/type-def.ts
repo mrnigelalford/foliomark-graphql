@@ -91,17 +91,6 @@ export default gql`
     assets: [Asset]
   }
 
-  type MintReceipt {
-    kind: String!
-    source: String
-    fee: String
-    counter: String
-    gas_limit: String
-    storage_limit: String
-    amount: String
-    destination: String
-  }
-
   type Transaction {
     to_: String
     token_id: String
@@ -167,6 +156,7 @@ export default gql`
     auction(id: ID): Auction
     collections: [Collection]
     collection(id: ID): Collection
+    getOperations(contractAddress: String)
   }
 
   type Mutation {
@@ -200,12 +190,6 @@ export default gql`
       likes: Int!
       assetIDs: [String]
     ): AssetSetResponse
-    Mint(
-      ownerAddress: String!
-      contractAddress: String!
-      tokens: [TokenMetadataInternal!]
-    ): ProcessReceipt
-    Originate(jsonMetadata: Metadata, ownerAddress: String): OriginationReceipt
     Transfer(
       contractAddress: String!
       tokenId: Int!

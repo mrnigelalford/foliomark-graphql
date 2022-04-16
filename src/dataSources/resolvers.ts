@@ -44,6 +44,10 @@ export interface TransferProps extends BurnProps {
   to: string;
 }
 
+export interface OperationProps {
+  contractAddress: string;
+}
+
 export default {
   Query: {
     asset: (_, { id }, { dataSources }) => dataSources.assets.getAssetByID(id),
@@ -58,6 +62,8 @@ export default {
       dataSources.collections.getAllCollections(),
     collection: (_, { id }, { dataSources }) =>
       dataSources.collections.getCollectionByID({ id }),
+    getOperations: (_, { contractAddress }, { dataSources }) =>
+      dataSources.collections.getOperations({ contractAddress }),
   },
   Mutation: {
     setAsset: async (
@@ -81,9 +87,6 @@ export default {
       dataSources.authors.setAuthor(props),
     setCollection: (_, props: Collection, { dataSources }) =>
       dataSources.collections.setCollection(props),
-    Mint: (_, args: MintProps): Promise<FA2Receipt> => tezosNode.mint(args),
-    Originate: async (_, args: OriginationProps): Promise<OriginationReceipt> =>
-      tezosNode.originate(args),
     Transfer: async (_, transferProps: TransferProps): Promise<FA2Receipt> =>
       tezosNode.transfer(transferProps),
     Burn: (_, burnProps: BurnProps): Promise<FA2Receipt> =>

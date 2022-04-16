@@ -1,9 +1,12 @@
 import MongoDataSource from 'apollo-mongodb-datasource';
+import axios from 'axios';
 import { MongoClient } from 'mongodb';
 import { Collection } from '../Types/Collection.type';
+import { OperationProps } from './resolvers';
 
 export default class Collections extends MongoDataSource {
   client = new MongoClient(process.env.mongoURL);
+  private contractOperations: Object[];
 
   getCollectionByID(id: string) {
     return this.findOne(id);
@@ -48,4 +51,17 @@ export default class Collections extends MongoDataSource {
 
     return 'success';
   };
+
+  async getOperations({ contractAddress }: OperationProps) {
+    const url = `https://api.tzkt.io/v1/accounts/${contractAddress}/operations?type=origination%2Ctransaction%2Creveal&limit=40&sort=1&quote=usd`;
+    return axios
+      .get(url)
+      .then(function (response) {
+        console.log('pin_success: ', response);
+        this.contractOperations = response;
+      })
+      .catch(function (error) {
+        console.log('pin_error: ', error);
+      });
+  }
 }

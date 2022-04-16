@@ -27,10 +27,12 @@
     "apollo-mongodb-datasource": "^1.1.0",
     "apollo-server": "^3.6.3",
     "apollo-server-cloud-functions": "^3.6.2",
+    "axios": "^0.26.1",
     "graphql": "^16.3.0"
   },
   "devDependencies": {
     "@google-cloud/functions-framework": "^2.1.1",
+    "@taquito/tezbridge-signer": "^12.0.0",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "assert": "^2.0.0",
