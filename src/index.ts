@@ -8,7 +8,9 @@ import Authors from './dataSources/Authors';
 import Auctions from './dataSources/Auctions';
 import Collections from './dataSources/Collections';
 
-const client = new MongoClient(process.env.mongoURL);
+const client = new MongoClient(
+  'mongodb+srv://fmark:F5bFfheX3y@foliomarkserverle.lpfzr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+);
 client.connect();
 
 const server = new ApolloServer({

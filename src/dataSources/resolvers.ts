@@ -1,3 +1,4 @@
+import { PubSub } from 'graphql-subscriptions';
 import { Auction } from '../Types/Auction.type';
 import { Collection } from '../Types/Collection.type';
 import { FA2Receipt, OriginationReceipt, TezosNode } from './TezosInterface';

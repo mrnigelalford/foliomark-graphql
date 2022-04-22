@@ -51,17 +51,4 @@ export default class Collections extends MongoDataSource {
 
     return 'success';
   };
-
-  async getOperations({ contractAddress }: OperationProps) {
-    const url = `https://api.tzkt.io/v1/accounts/${contractAddress}/operations?type=origination%2Ctransaction%2Creveal&limit=40&sort=1&quote=usd`;
-    return axios
-      .get(url)
-      .then(function (response) {
-        console.log('pin_success: ', response);
-        this.contractOperations = response;
-      })
-      .catch(function (error) {
-        console.log('pin_error: ', error);
-      });
-  }
 }
