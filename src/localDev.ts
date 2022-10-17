@@ -27,10 +27,11 @@ const server = new localApolloServer({
   mocks: false, // TODO: Remove in PROD.
   mockEntireSchema: false, // TODO: Remove in PROD.
 });
+const port = Number.parseInt(process.env.PORT) || 4000;
 
-server.listen().then(() => {
+server.listen(port).then(() => {
   console.log(`
       Server is running!
-      Listening on port 4000
+      Listening on port ${port}
     `);
 });
