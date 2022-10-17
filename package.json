@@ -4,8 +4,8 @@
   "description": "graphql middle tier of foliomark",
   "main": "dist/index.js",
   "scripts": {
-    "tsc": "tsc --skipLibCheck",
-    "postinstall": "npm run tsc",
+    "tsc": "tsc",
+    "postinstall": "npm run tsc --skipLibCheck",
     "test": "test",
     "start": "tsc && node dist/index.js",
     "localDev": "tsc && node dist/localDev.js",
