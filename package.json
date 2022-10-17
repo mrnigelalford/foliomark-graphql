@@ -4,6 +4,8 @@
   "description": "graphql middle tier of foliomark",
   "main": "dist/index.js",
   "scripts": {
+    "tsc": "tsc",
+    "postinstall": "npm run tsc",
     "test": "test",
     "start": "tsc && node dist/index.js",
     "localDev": "tsc && node dist/localDev.js",
